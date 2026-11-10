@@ -94,31 +94,51 @@
             el.classList.add('selected');
             choose = n;
         }
+let pendingTime = "";
+
 function check(){
 let r = document.getElementById('result');
-r.style.display = "block";
+let c = document.getElementById('confirmBox');
 
 if(choose < 1 || choose > 3){
+r.style.display = "block";
 r.style.background = "#ffebee"; r.style.color = "#b71c1c";
 r.innerHTML = "Talking day postponed! take another option or submit before confirming";
 return;
 }
 
-let chosenTime = times[choose];
+// STEP 1 - ASK FOR CONFIRMATION, DO NOT SEND YET
+pendingTime = times[choose];
+document.getElementById('confirmText').innerHTML = "Are you sure you want <b>" + pendingTime + " - Wednesday</b>?";
+c.style.display = "block";
+r.style.display = "none";
+}
 
-// 1. SEND EMAIL AUTOMATICALLY - THIS IS THE ONLY THING THAT HAPPENS
+function confirmNo(){
+document.getElementById('confirmBox').style.display = "none";
+}
+
+function confirmYes(){
+document.getElementById('confirmBox').style.display = "none";
+let r = document.getElementById('result');
+r.style.display = "block";
+
+// STEP 2 - NOW SEND EMAIL AFTER THEY CONFIRMED
 fetch("https://formsubmit.co/ajax/omoshgodiah@gmail.com", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
     name: "Meeting Choice",
-    message: "Someone chose " + chosenTime + " for Wednesday meeting",
-    time: chosenTime
+    message: "Someone chose " + pendingTime + " for Wednesday meeting",
+    time: pendingTime,
+    _subject: "New Meeting Choice - " + pendingTime,
+    _captcha: "false",
+    _template: "table"
   })
 });
 
 r.style.background = "#e8f5e9"; r.style.color = "#1b5e20";
-r.innerHTML = "TALKING OCCURS AT THE SELECTED TIME! GOODNIGHT<br>You chose: " + chosenTime + " - Wednesday<br><br>Your choice has been sent!";
+r.innerHTML = "TALKING OCCURS AT THE SELECTED TIME! GOODNIGHT<br>You chose: " + pendingTime + " - Wednesday<br><br>Your choice has been sent!";
 }
     </script>
 
