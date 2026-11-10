@@ -1,87 +1,143 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Talking Wednesday</title>
-<link rel="stylesheet" href"style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+    <div class="card">
+        <div class="header">
+            <span>Schedule App</span>
+            <h1>TIME AND DAY</h1>
+            <p>Choose your meeting time for tomorrow</p>
+        </div>
 
-<h1>Talking - Wednesday Meeting</h1>
-<p>Choose your time:</p>
+        <div class="body">
+            <div class="label">Chose option from list: </div>
 
-<button id="btn1" onclick="selectTime(1)">9:00</button><br>
-<button id="btn2" onclick="selectTime(2)">10:00</button><br>
-<button id="btn3" onclick="selectTime(3)">11:00</button><br><br>
+            <label class="option" onclick="select(this, 1)">
+                <div class="num">1</div>
 
-<button onclick="check()" style="background:#1b5e20">CONFIRM & SUBMIT</button>
+                <div>
+                    <div class="time">9:00</div>
+                    <div class="day">Wednesday</div>
+                </div>
+                <div class="badge">Best time</div>
+            </label>
 
-<div id="confirmBox">
-  <p id="confirmText" style="font-size:18px"></p>
-  <button onclick="confirmYes()" style="background:#1b5e20">YES, CONFIRM</button>
-  <button onclick="confirmNo()" style="background:#b71c1c">NO, CHANGE IT</button>
-</div>
+            <label class="option" onclick="select(this, 2)">
+                <div class="num">2</div>
 
-<div id="result"></div>
+                <div>
+                    <div class="time">10:00</div>
+                    <div class="day">Wednesday</div>
+                </div>
+                <div class="badge">Good time</div>
+            </label>
 
-<script>
-let choose = 0;
-let times = ["", "9:00", "10:00", "11:00"];
-let pendingTime = "";
 
-function selectTime(n){
-  choose = n;
-  document.getElementById('btn1').classList.remove('selected');
-  document.getElementById('btn2').classList.remove('selected');
-  document.getElementById('btn3').classList.remove('selected');
-  document.getElementById('btn'+n).classList.add('selected');
-}
+            <label class="option" onclick="select(this, 3)">
+                <div class="num">3</div>
 
-function check(){
-let r = document.getElementById('result');
-let c = document.getElementById('confirmBox');
+                <div>
+                    <div class="time">11:00</div>
+                    <div class="day">Wednesday</div>
+                </div>
+                <div class="badge">Latest time</div>
+            </label>
 
-if(choose < 1 || choose > 3){
-r.style.display = "block";
-r.style.background = "#ffebee"; r.style.color = "#b71c1c";
-r.innerHTML = "Talking day postponed! take another option or submit before confirming";
-return;
-}
+            <label class="option" onclick="select(this, 4)">
+                <div class="num">3</div>
 
-// STEP 1 - ASK FOR CONFIRMATION, DO NOT SEND YET
-pendingTime = times[choose];
-document.getElementById('confirmText').innerHTML = "Are you sure you want <b>" + pendingTime + " - Wednesday</b>?";
-c.style.display = "block";
-r.style.display = "none";
-}
+                <div>
+                    <div class="time">11:30</div>
+                    <div class="day">Wednesday</div>
+                </div>
+                <div class="badge">Bad timing</div>
+            </label>
 
-function confirmNo(){
-document.getElementById('confirmBox').style.display = "none";
-}
 
-function confirmYes(){
-document.getElementById('confirmBox').style.display = "none";
-let r = document.getElementById('result');
-r.style.display = "block";
 
-// STEP 2 - SEND EMAIL ONLY AFTER THEY CONFIRMED
-fetch("https://formsubmit.co/ajax/omoshgodiah@gmail.com", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    name: "Meeting Choice",
-    message: "Someone chose " + pendingTime + " for Wednesday meeting",
-    time: pendingTime,
-    _subject: "New Meeting Choice - " + pendingTime,
-    _captcha: "false",
-    _template: "table"
-  })
-});
+            <button type="button" onclick="check()">Confirm Meeting</button>
+            <div id="result"></div>
+            <div class="javabox">// MY JAVA CODE - schedule.java
+                import java.util.Scanner;
+                import java.util.ArrayList;
+                public class schedule{
+                public static void main(String[] args){
+                Scanner input = new Scanner(System.in);
+                ArrayList&lt;String&gt; day = new ArrayList&lt;&gt;();
+                ArrayList&lt;String&gt; Time = new ArrayList&lt;&gt;();
+                day.add("Wednesday"); Time.add("9:00");
+                day.add("Wednesday"); Time.add("10:00");
+                day.add("Wednesday"); Time.add("11:00");
+                System.out.println("\n-----TIME & DAY-----");
+                for(int i = 0; i &lt; day.size(); i++){
+                System.out.println((i+1) + ". " + Time.get(i) + " - " + day.get(i));
+                }
+                }
+                }
+            </div>
+        </div>
+        <div class="footer">Reconcideration @ 2026</div>
+    </div>
+    </div>
+    <script>
+        let choose = 0;
+        let times = ["", "9:00", "10:00", "11:00", "11:30"];
+        function select(el, n) {
+            document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+            el.classList.add('selected');
+            choose = n;
+        }
+        function check() {
+            let r = document.getElementById('result');
+            let c = document.getElementById('confirmBox');
 
-r.style.background = "#e8f5e9"; r.style.color = "#1b5e20";
-r.innerHTML = "TALKING OCCURS AT THE SELECTED TIME! GOODNIGHT<br>You chose: " + pendingTime + " - Wednesday<br><br>Your choice has been sent!";
-}
-</script>
+            if (choose < 1 || choose > 4) {
+                r.style.display = "block";
+                r.style.background = "#ffebee"; r.style.color = "#b71c1c";
+                r.innerHTML = "Talking day postponed! take another option or submit before confirming";
+                return;
+            }
+
+            pendingTime = times[choose];
+            document.getElementById('confirmText').innerHTML = "Are you sure you want <b>" + pendingTime + " - Wednesday</b>?";
+            c.style.display = "block";
+            r.style.display = "none";
+        }
+
+        function confirmNo() {
+            document.getElementById('confirmBox').style.display = "none";
+        }
+
+        function confirmYes() {
+            document.getElementById('confirmBox').style.display = "none";
+            let r = document.getElementById('result');
+            r.style.display = "block";
+
+            fetch("https://formsubmit.co/ajax/omoshgodiah@gmail.com", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    name: "Meeting Choice",
+                    message: "Someone chose " + pendingTime + " for Wednesday meeting",
+                    time: pendingTime,
+                    _subject: "New Meeting Choice - " + pendingTime,
+                    _captcha: "false",
+                    _template: "table"
+                })
+            });
+
+            r.style.background = "#e8f5e9"; r.style.color = "#1b5e20";
+            r.innerHTML = "TALKING OCCURS AT THE SELECTED TIME! GOODNIGHT<br>You chose: " + pendingTime + " - Wednesday<br><br>Your choice has been sent!";
+        }
+    </script>
 
 </body>
+
 </html>
