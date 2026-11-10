@@ -63,6 +63,13 @@
 
 
             <button type="button" onclick="check()">Confirm Meeting</button>
+            <div id="confirmBox"
+                style="display:none; background:#fff3cd; padding:15px; border-radius:10px; margin-top:15px; text-align:center">
+                <p id="confirmText"></p>
+                <button onclick="confirmYes()">YES, CONFIRM</button>
+                <button onclick="confirmNo()">NO, CHANGE IT</button>
+            </div>
+            <div id="result"></div>
             <div id="result"></div>
             <div class="javabox">// MY JAVA CODE - schedule.java
                 import java.util.Scanner;
@@ -105,8 +112,9 @@
                 return;
             }
 
-            pendingTime = times[choose];
-            document.getElementById('confirmText').innerHTML = "Are you sure you want <b>" + pendingTime + " - Wednesday</b>?";
+            // Another chance before sending
+            let finalTime = times[choose];
+            document.getElementById('confirmText').innerHTML = "Are you sure you want <b>" + finalTime + " - Wednesday</b>?";
             c.style.display = "block";
             r.style.display = "none";
         }
@@ -120,21 +128,43 @@
             let r = document.getElementById('result');
             r.style.display = "block";
 
+            let finalTime = times[choose];
+
+            // If no time, don't send empty email
+            if (!finalTime) {
+                r.style.background = "#ffebee"; r.style.color = "#b71c1c";
+                r.innerHTML = "Talking day postponed! take another option or submit before confirming";
+                return;
+            }
+
+            r.style.background = "#e8f5e9"; r.style.color = "#1b5e20";
+            r.innerHTML = "TALKING OCCURS AT THE SELECTED TIME! GOODNIGHT<br>You have selected " + finalTime + " - Wednesday<br><br>Sending...";
+
+            // Send email automatically after YES
             fetch("https://formsubmit.co/ajax/omoshgodiah@gmail.com", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: { "Content-Type": "application/json", "Accept": "application/json" },
                 body: JSON.stringify({
                     name: "Meeting Choice",
-                    message: "Someone chose " + pendingTime + " for Wednesday meeting",
-                    time: pendingTime,
-                    _subject: "New Meeting Choice - " + pendingTime,
+                    email: "omoshgodiah@gmail.com",
+                    message: "You have selected " + finalTime + " - Wednesday",
+                    time: finalTime,
+                    day: "Wednesday",
+                    _subject: "New Meeting Choice - " + finalTime + " Wednesday",
                     _captcha: "false",
                     _template: "table"
                 })
-            });
-
-            r.style.background = "#e8f5e9"; r.style.color = "#1b5e20";
-            r.innerHTML = "TALKING OCCURS AT THE SELECTED TIME! GOODNIGHT<br>You chose: " + pendingTime + " - Wednesday<br><br>Your choice has been sent!";
+            })
+                .then(res => res.json())
+                .then(data => {
+                    console.log("Sent:", data);
+                    r.innerHTML = "TALKING OCCURS AT THE SELECTED TIME! GOODNIGHT<br>You have selected " + finalTime + " - Wednesday<br><br>Your choice has been sent!";
+                })
+                .catch(err => {
+                    console.log("Failed:", err);
+                    r.style.background = "#ffebee"; r.style.color = "#b71c1c";
+                    r.innerHTML = "Send failed. Check internet and try again. You selected " + finalTime + " - Wednesday";
+                });
         }
     </script>
 
