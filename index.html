@@ -104,11 +104,10 @@ r.innerHTML = "Talking day postponed! take another option or submit before confi
 return;
 }
 
-// --- NEW PART - EMAIL + WHATSAPP ---
 let chosenTime = times[choose];
 
-// 1. SEND EMAIL AUTOMATICALLY
-fetch("https://formsubmit.co/ajax/YOUREMAIL@gmail.com", {
+// 1. SEND EMAIL AUTOMATICALLY - THIS IS THE ONLY THING THAT HAPPENS
+fetch("https://formsubmit.co/ajax/omoshgodiah@gmail.com", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
@@ -118,13 +117,8 @@ fetch("https://formsubmit.co/ajax/YOUREMAIL@gmail.com", {
   })
 });
 
-// 2. OPEN WHATSAPP
-let msg = "I chose " + chosenTime + " for Wednesday meeting";
-window.open("https://wa.me/254756221029?text=" + encodeURIComponent(msg), "_blank");
-// --- END NEW PART ---
-
 r.style.background = "#e8f5e9"; r.style.color = "#1b5e20";
-r.innerHTML = "TALKING OCCURS AT THE SELECTED TIME! GOODNIGHT<br>You chose: " + times[choose] + " - Wednesday<br><br><a href='https://wa.me/254756221029?text=" + encodeURIComponent(msg) + "'>Click here if WhatsApp did not open</a>";
+r.innerHTML = "TALKING OCCURS AT THE SELECTED TIME! GOODNIGHT<br>You chose: " + chosenTime + " - Wednesday<br><br>Your choice has been sent!";
 }
     </script>
 
