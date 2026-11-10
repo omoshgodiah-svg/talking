@@ -94,18 +94,37 @@
             el.classList.add('selected');
             choose = n;
         }
- function check(){
-  let r = document.getElementById('result');
-  r.style.display = "block";
+function check(){
+let r = document.getElementById('result');
+r.style.display = "block";
 
-  if(choose < 1 || choose > 3){
-    r.style.background = "#ffebee"; r.style.color = "#b71c1c";
-    r.innerHTML = "Talking day postponed! take another option or submit before confirming";
-    return;
-  }
+if(choose < 1 || choose > 3){
+r.style.background = "#ffebee"; r.style.color = "#b71c1c";
+r.innerHTML = "Talking day postponed! take another option or submit before confirming";
+return;
+}
 
-  r.style.background = "#e8f5e9"; r.style.color = "#1b5e20";
-  r.innerHTML = "TALKING OCCURS AT THE SELECTED TIME! GOODNIGHT<br>You chose: " + times[choose] + " - Wednesday<br><br><a href='https://wa.me/254756221029?text=I%20chose%20" + times[choose] + "%20for%20Wednesday%20meeting' style='display:inline-block;background:#25D366;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold'>Submit</a><br><br><small>If you want to change, pick another time above and press Confirm again before you Submit.</small>";
+// --- NEW PART - EMAIL + WHATSAPP ---
+let chosenTime = times[choose];
+
+// 1. SEND EMAIL AUTOMATICALLY
+fetch("https://formsubmit.co/ajax/YOUREMAIL@gmail.com", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    name: "Meeting Choice",
+    message: "Someone chose " + chosenTime + " for Wednesday meeting",
+    time: chosenTime
+  })
+});
+
+// 2. OPEN WHATSAPP
+let msg = "I chose " + chosenTime + " for Wednesday meeting";
+window.open("https://wa.me/254756221029?text=" + encodeURIComponent(msg), "_blank");
+// --- END NEW PART ---
+
+r.style.background = "#e8f5e9"; r.style.color = "#1b5e20";
+r.innerHTML = "TALKING OCCURS AT THE SELECTED TIME! GOODNIGHT<br>You chose: " + times[choose] + " - Wednesday<br><br><a href='https://wa.me/254756221029?text=" + encodeURIComponent(msg) + "'>Click here if WhatsApp did not open</a>";
 }
     </script>
 
