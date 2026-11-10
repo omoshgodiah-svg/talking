@@ -123,49 +123,38 @@
             document.getElementById('confirmBox').style.display = "none";
         }
 
-        function confirmYes() {
-            document.getElementById('confirmBox').style.display = "none";
-            let r = document.getElementById('result');
-            r.style.display = "block";
+       function confirmYes(){
+document.getElementById('confirmBox').style.display = "none";
+let r = document.getElementById('result');
+r.style.display = "block";
 
-            let finalTime = times[choose];
+let finalTime = times[choose];
 
-            // If no time, don't send empty email
-            if (!finalTime) {
-                r.style.background = "#ffebee"; r.style.color = "#b71c1c";
-                r.innerHTML = "Talking day postponed! take another option or submit before confirming";
-                return;
-            }
+if(!finalTime){
+r.style.background = "#ffebee"; r.style.color = "#b71c1c";
+r.innerHTML = "Talking day postponed! take another option or submit before confirming";
+return;
+}
 
-            r.style.background = "#e8f5e9"; r.style.color = "#1b5e20";
-            r.innerHTML = "TALKING OCCURS AT THE SELECTED TIME! GOODNIGHT<br>You have selected " + finalTime + " - Wednesday<br><br>Sending...";
+r.style.background = "#e8f5e9"; r.style.color = "#1b5e20";
+r.innerHTML = "TALKING OCCURS AT THE SELECTED TIME! GOODNIGHT<br>You have selected " + finalTime + " - Wednesday<br><br>Your choice has been sent!";
 
-            // Send email automatically after YES
-            fetch("https://formsubmit.co/ajax/omoshgodiah@gmail.com", {
-                method: "POST",
-                headers: { "Content-Type": "application/json", "Accept": "application/json" },
-                body: JSON.stringify({
-                    name: "Meeting Choice",
-                    email: "omoshgodiah@gmail.com",
-                    message: "You have selected " + finalTime + " - Wednesday",
-                    time: finalTime,
-                    day: "Wednesday",
-                    _subject: "New Meeting Choice - " + finalTime + " Wednesday",
-                    _captcha: "false",
-                    _template: "table"
-                })
-            })
-                .then(res => res.json())
-                .then(data => {
-                    console.log("Sent:", data);
-                    r.innerHTML = "TALKING OCCURS AT THE SELECTED TIME! GOODNIGHT<br>You have selected " + finalTime + " - Wednesday<br><br>Your choice has been sent!";
-                })
-                .catch(err => {
-                    console.log("Failed:", err);
-                    r.style.background = "#ffebee"; r.style.color = "#b71c1c";
-                    r.innerHTML = "Send failed. Check internet and try again. You selected " + finalTime + " - Wednesday";
-                });
-        }
+// Send in background - this line initiates it
+fetch("https://formsubmit.co/ajax/omoshgodiah@gmail.com", {
+  method: "POST",
+  headers: { "Content-Type": "application/json", "Accept": "application/json" },
+  body: JSON.stringify({
+    name: "Meeting Choice",
+    email: "omoshgodiah@gmail.com",
+    message: "You have selected " + finalTime + " - Wednesday",
+    time: finalTime,
+    day: "Wednesday",
+    _subject: "New Meeting Choice - " + finalTime + " Wednesday",
+    _captcha: "false",
+    _template: "table"
+  })
+}).catch(err => console.log("Failed:", err));
+}
     </script>
 
 </body>
